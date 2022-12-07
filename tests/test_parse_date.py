@@ -1,3 +1,7 @@
+import datetime
+
+import pytest
+
 from facebook_scraper.utils import parse_datetime
 
 
@@ -45,6 +49,13 @@ class TestParseDate:
         'Just now',
     ]
 
+    string_dates_cases = [
+        ('1h', datetime.datetime.now() - datetime.timedelta(hours=1)),
+        ('3hrs', datetime.datetime.now() - datetime.timedelta(hours=3)),
+        ('a week ago', datetime.datetime.now() - datetime.timedelta(weeks=1)),
+        ('yesterday', datetime.datetime.now() - datetime.timedelta(days=1))
+
+    ]
     def test_all_dates(self):
         for date in self.dates:
             try:
@@ -52,3 +63,6 @@ class TestParseDate:
             except AssertionError as e:
                 print(f'Failed to parse {date}')
                 raise e
+    @pytest.mark.parametrize('date_string,expected',string_dates_cases)
+    def test_date_strings(self, date_string, expected):
+        assert parse_datetime(date_string).replace(microsecond=0,second=0) == expected.replace(microsecond=0,second=0)
