@@ -920,6 +920,8 @@ class FacebookScraper:
             if "checkpoint" in response.url:
                 if response.html.find("h1", containing="We suspended your account"):
                     raise exceptions.AccountDisabled("Your Account Has Been Disabled")
+                elif "your account has been locked" in response.html.html.lower():
+                    raise exceptions.AccountDisabled("Your Account Has Been Locked")
             if title:
                 if title.text.lower() in not_found_titles:
                     raise exceptions.NotFound(title.text)
