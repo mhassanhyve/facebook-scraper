@@ -253,8 +253,7 @@ class PostExtractor:
 
     def extract_post_id(self) -> PartialPost:
         return {
-            'post_id': self.live_data.get("ft_ent_identifier")
-            or self.data_ft.get('top_level_post_id')
+            'post_id': json.loads(self.element.attrs.get("data-store")).get("feedback_target")
         }
 
     def extract_username(self) -> PartialPost:
