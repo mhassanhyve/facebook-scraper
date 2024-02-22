@@ -252,9 +252,14 @@ class PostExtractor:
         return post
 
     def extract_post_id(self) -> PartialPost:
-        return {
-            'post_id': json.loads(self.element.attrs.get("data-store")).get("feedback_target")
-        }
+        if 'data-store' in self.element.attrs:
+            data_store_json = json.loads(self.element.attrs.get("data-store"))
+            if 'feedback_target' in data_store_json:
+                return {
+                    'post_id': data_store_json.get("feedback_target")
+                }
+        
+        return {'post_id' : None}
 
     def extract_username(self) -> PartialPost:
         elem = self.element.find('h3 strong a,a.actor-link', first=True)
@@ -403,8 +408,14 @@ class PostExtractor:
             return None
 
     def extract_user_id(self) -> PartialPost:
+        element = self.element
+        share_button = element.xpath('.//a[text()="Share"]')
+        datastore = share_button[0].attrs['data-store']
+        datastore_json = json.loads(datastore)
+        shareable_uri = datastore_json.get('shareable_uri')
+        user_id =  shareable_uri.split('&id=')[-1].split('&')[0]
         return {
-            'user_id': self.data_ft['content_owner_id_new'],
+            'user_id': user_id,
             'page_id': self.data_ft.get("page_id"),
         }
 
