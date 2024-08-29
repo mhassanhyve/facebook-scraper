@@ -50,7 +50,7 @@ def set_cookies(cookies):
             raise exceptions.InvalidCookies(f"Missing cookies with name(s): {missing_cookies}")
         _scraper.session.cookies.update(cookies)
         if not _scraper.is_logged_in():
-            raise exceptions.InvalidCookies(f"Cookies are not valid")
+            raise exceptions.InvalidCookies(f"Your Account Has Been Disabled")
 
 
 def unset_cookies():

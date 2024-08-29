@@ -917,20 +917,47 @@ class FacebookScraper:
                 "you can't use this feature right now",
                 "you’re temporarily blocked",
             ]
+            # if "checkpoint" in response.url:
+            #     if response.html.find("h1", containing="We suspended your account"):
+            #         raise exceptions.AccountDisabled("Your Account Has Been Disabled")
+            #     elif "your account has been locked" in response.html.html.lower():
+            #         raise exceptions.AccountDisabled("Your Account Has Been Locked")
+            # if title:
+            #     if title.text.lower() in not_found_titles:
+            #         raise exceptions.NotFound(title.text)
+            #     elif title.text.lower() == "error":
+            #         raise exceptions.UnexpectedResponse("Your request couldn't be processed")
+            #     elif title.text.lower() in temp_ban_titles:
+            #         raise exceptions.TemporarilyBanned(title.text)
+            #     elif ">your account has been disabled<" in response.html.html.lower():
+            #         raise exceptions.AccountDisabled("Your Account Has Been Disabled")
+            #     elif (
+            #         ">We saw unusual activity on your account. This may mean that someone has used your account without your knowledge.<"
+            #         in response.html.html
+            #     ):
+            #         raise exceptions.AccountDisabled("Your Account Has Been Locked")
+            #     elif (
+            #         title.text == "Log in to Facebook | Facebook"
+            #         or response.url.startswith(utils.urljoin(FB_MOBILE_BASE_URL, "login"))
+            #         or response.url.startswith(utils.urljoin(FB_W3_BASE_URL, "login"))
+            #     ):
+            #         raise exceptions.LoginRequired(
+            #             "A login (cookies) is required to see this page"
+            #         )
             if "checkpoint" in response.url:
                 if response.html.find("h1", containing="We suspended your account"):
-                    raise exceptions.AccountDisabled("Your Account Has Been Disabled")
+                    raise exceptions.AccountDisabled("Your Account Has Been Locked")
                 elif "your account has been locked" in response.html.html.lower():
                     raise exceptions.AccountDisabled("Your Account Has Been Locked")
             if title:
                 if title.text.lower() in not_found_titles:
-                    raise exceptions.NotFound(title.text)
+                    raise exceptions.NotFound("Your Account Has Been Locked")
                 elif title.text.lower() == "error":
                     raise exceptions.UnexpectedResponse("Your request couldn't be processed")
                 elif title.text.lower() in temp_ban_titles:
-                    raise exceptions.TemporarilyBanned(title.text)
+                    raise exceptions.TemporarilyBanned("Your Account Has Been Locked")
                 elif ">your account has been disabled<" in response.html.html.lower():
-                    raise exceptions.AccountDisabled("Your Account Has Been Disabled")
+                    raise exceptions.AccountDisabled("Your Account Has Been Locked")
                 elif (
                     ">We saw unusual activity on your account. This may mean that someone has used your account without your knowledge.<"
                     in response.html.html
@@ -942,7 +969,7 @@ class FacebookScraper:
                     or response.url.startswith(utils.urljoin(FB_W3_BASE_URL, "login"))
                 ):
                     raise exceptions.LoginRequired(
-                        "A login (cookies) is required to see this page"
+                        "Your Account Has Been Locked"
                     )
             return response
         except RequestException as ex:
