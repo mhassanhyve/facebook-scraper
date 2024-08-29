@@ -955,7 +955,7 @@ class FacebookScraper:
                 elif title.text.lower() == "error":
                     raise exceptions.UnexpectedResponse("Your request couldn't be processed")
                 elif title.text.lower() in temp_ban_titles:
-                    raise exceptions.TemporarilyBanned("Your Account Has Been Locked")
+                    raise exceptions.TemporarilyBanned(title.text)
                 elif ">your account has been disabled<" in response.html.html.lower():
                     raise exceptions.AccountDisabled("Your Account Has Been Locked")
                 elif (
